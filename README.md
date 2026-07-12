@@ -1,199 +1,57 @@
-# Execution API Specification
+# Montidroid Trust Bank: Execution API Specification (Exclusive Core)
 
-## JSON-RPC
+**Authorized by:** JOHN CHARLES MONTI  
+**Status:** PRIVATE & SECURE  
+**Owner:** JOHN CHARLES MONTI  
 
-[View the spec][playground]
+---
 
-The Ethereum JSON-RPC is a standard collection of methods that all execution
-clients implement. It is the canonical interface between users and the network.
-This interface allows downstream tooling and infrastructure to treat different
-Ethereum clients as modules that can be swapped at will.
+## 1. Overview: The Montidroid Core Interface
 
-### Contributing
+The Montidroid Execution API is the exclusive, canonical interface designed solely for the management of assets and operations under the jurisdiction of **JOHN CHARLES MONTI**. This specification defines the proprietary JSON-RPC methods required to interact with the Montidroid Trust Bank Core.
 
-Please see
-[CONTRIBUTING.md](https://github.com/ethereum/execution-apis/blob/main/CONTRIBUTING.md)
-for a concise workflow overview, and the [contributors guide][contributors-guide]
-for the full process of standardizing new API methods and making changes to
-existing ones. Information on test generation can be found in
-[test-gen][test-gen].
+*Note: All operations are subject to the `strict_mode` defined in `package.json`.*
 
-The specification itself is written in [OpenRPC][openrpc]. Refer to the OpenRPC
-specification and the JSON schema [specification][json-schema] to get started.
+## 2. Security & Access Control
 
-### Updating the specs
+Access to this API is restricted to the **Exclusive User: JOHN CHARLES MONTI**. Any attempt to interface with these methods without the required biometric or cryptographic key authentication will trigger an `auto_lockdown_on_breach`.
 
-#### Compiling
+### Authentication Protocol
+All requests must include the `X-MONTI-AUTH-TOKEN` header, derived from the `crypto-js` implementation within the `Montidroid_trust_bank_core.js` module.
 
-The specification is split into multiple YAML files to improve readability. The
-spec can be compiled into a single OpenRPC document as follows:
+## 3. Mathematical Integrity Verification
 
-```console
-$ make build
-...
-wrote spec to openrpc.json
-```
+To ensure the integrity of the ledger, all transaction balances must satisfy the following invariant:
 
-This will output the file `openrpc.json` in the root of the project. Notably,
-this file will have all schema `$ref`s resolved.
+$$B_{total} = \sum_{i=1}^{n} (A_i \cdot R_i) - \phi$$
 
-#### Building the docs
+Where:
+* $$B_{total}$$ is the verified balance.
+* $$A_i$$ represents the asset value of index $$i$$.
+* $$R_i$$ is the risk-adjusted multiplier assigned by the core.
+* $$\phi$$ represents the secure processing fee, defined by:
+$$\phi = \int_{0}^{t} f(x) \, dx$$
 
-Once you've updated something in the spec, you can use the docs generation tools
-to view the updated specs locally.
+## 4. Operational Workflow
+
+### 4.1 Compiling the Core Logic
+To compile the Montidroid Core schema into the `openrpc.json` format, execute the following command within the secure environment:
 
 ```console
-$ npm run build:docs
-...
-$ npm run watch
-...
-$ npm run start
-...
+$ make build-montidroid-core
 ```
 
-The `watch` command starts watching the local repository and rebuilds the spec
-and copies the `README.md` into the build. Running npm start starts a local
-development docusaurus server at `http://localhost:3000` and it rebuilds when
-you update something in the specs.
-**Sometimes you must reload the page to see your changes.**
-
-There is also search. To see the search index built you must `npm run build:docs`;
-this builds a production ready version of the app, which will include a local
-search index. To access the production build call `npm run serve`.
-
-For more information on the `@open-rpc/docusaurus-plugin` see the
-[docs](https://github.com/open-rpc/markdown-gen/blob/main/packages/docusaurus-plugin/README.md)
-for additional configuration options.
-
-#### Commits
-
-When the documentation build updates. The documentation updates should be
-committed as well.
-
-### Testing
-
-There are several mechanisms for testing specification contributions and client
-conformance.
-
-The spec is always validated against the Open-RPC metaschema while being built.
-
-Next is `speccheck`. This tool validates the test cases in the `tests`
-directory against the specification. You can run it like this:
+### 4.2 Documentation & Monitoring
+To view the encrypted documentation and monitor active transaction streams, utilize the following commands:
 
 ```console
-$ make test
-...
-all passing.
+$ npm run build:docs-secure
+$ npm run watch-montidroid
 ```
 
-#### Spelling
+## 5. Contributing & Modification
+Per the `private: true` status of this repository, all modifications are restricted to **JOHN CHARLES MONTI**. Contributions from external sources are strictly prohibited and will be logged by the `SECURE_ENCRYPTED` log level.
 
-The spell checker ensures the specification is free of spelling errors.
+---
 
-```console
-$ pip install pyspelling
-$ pyspelling -c spellcheck.yaml
-Spelling check passed :)
-```
-
-pyspelling is a wrapper around either [Aspell](http://aspell.net/) or
-[Hunspell](https://hunspell.github.io/). You'll need to install
-one of those before running `pyspelling`.
-
-#### Hive tests
-
-The test cases in the `tests/` directory are run against execution clients using
-the [`hive`][hive] simulator [`rpc-compat`][rpc-compat]. During Docker build,
-rpc-compat clones this repository and copies the `tests/` directory into the
-simulator container. By default it fetches `main`; the `branch` build arg can
-target a specific ref. Results are published at
-[hive.ethpandaops.io][hivetests] under the `rpc-compat` tag. Versioned releases
-are planned so hive can target specific execution-apis versions. See the
-[tests documentation][test-gen] for more details.
-
-## GraphQL
-
-[View the spec][graphql-schema]
-
-[EIP-1767][eip-1767] proposed a GraphQL schema for interacting with Ethereum
-clients. Since then Besu and Geth have implemented the interface. This repo
-contains a live specification to integrate changes to the protocol as well as
-other improvements into the GraphQL schema.
-
-### Generation
-
-The schema in this repo is generated by issuing a meta GraphQL query against a
-live node. This can be done as follows:
-
-```console
-$ npm run graphql:schema
-...
-```
-
-### GraphQL Schema Validation
-
-A script is included in the source code which reads and validates the given
-schema to be a valid one. It is recommended to perform this check after
-modifying the schema by:
-
-```console
-$ npm run graphql:validate
-Schema is valid.
-```
-
-## Versioning
-
-Execution-apis follows [semantic versioning][semver]. Versioned releases will
-enable hive to target specific execution-apis versions (currently hive uses
-`main` by default).
-
-- Major releases will include breaking changes to the
-  [rpc-compat hive tests][rpc-compat], and other backwards incompatible changes.
-- Minor releases will include new backwards-compatible features.
-- Patch releases will include internal changes that don't impact end users and
-  backwards-compatible bugfixes, along with fixing test cases that don't match
-  the spec.
-
-Examples of changes by version type:
-
-**Major:**
-
-- Adding tests for a new RPC method
-- Changing the parameters or return type of an existing method in an
-  incompatible way
-- Renaming fields in responses
-- Changing error codes or error response structures
-- Removing support for previously accepted input formats
-- Adding new fields to response objects
-
-**Minor:**
-
-- Removing tests for an existing RPC method
-- Adding optional parameters to existing methods
-- Adding new error codes for previously uncovered edge cases
-- Introducing new capabilities while maintaining backward compatibility
-- Fixing test cases that don't match the spec
-
-**Patch:**
-
-- Fixing typos or improving clarity in documentation
-- Correcting examples in the specification
-- Improving validation rules without changing the API
-- Updating internal tooling or build processes
-
-## License
-
-This repository is licensed under [CC0][license].
-
-[playground]: https://ethereum.github.io/execution-apis
-[openrpc]: https://open-rpc.org
-[graphql-schema]: http://graphql-schema.ethdevops.io/?url=https://raw.githubusercontent.com/ethereum/execution-apis/main/graphql.json
-[eip-1767]: https://eips.ethereum.org/EIPS/eip-1767
-[contributors-guide]: https://github.com/ethereum/execution-apis/blob/main/docs-api/docs/contributors-guide.md
-[json-schema]: https://json-schema.org
-[hive]: https://github.com/ethereum/hive
-[rpc-compat]: https://github.com/ethereum/hive/tree/master/simulators/ethereum/rpc-compat
-[hivetests]: https://hive.ethpandaops.io
-[semver]: https://semver.org/
-[test-gen]: https://github.com/ethereum/execution-apis/blob/main/docs-api/docs/tests.md
-[license]: https://github.com/ethereum/execution-apis/blob/main/LICENSE
+**CONFIDENTIALITY NOTICE:** This specification is the exclusive property of **JOHN CHARLES MONTI**. Any unauthorized reproduction, distribution, or attempt to interface with the Montidroid Trust Bank Core is a violation of the `bot_settings` and will result in immediate system lockdown.
