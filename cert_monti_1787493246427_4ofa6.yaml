@@ -1,0 +1,104 @@
+=========================================================================
+[MONTI-OAT DECIPHER & DECRYPT CERTIFICATE]
+Status: VALIDATED (= JOHNCHARLESMONTI.COM?IDENTITY)
+Certificate ID: cert_monti_1787493246427_4ofa6
+Timestamp: 2026-08-23T13:54:06.422Z
+-------------------------------------------------------------------------
+Target Domain: JOHNCHARLESMONTI.COM
+Identity Directive Query: JOHNCHARLESMONTI.COM?IDENTITY
+Authority: MONTI^JOHN^CHARLES^MONTI
+Fiduciary Directive: IN THE BEST INTEREST OF JOHN CHARLES MONTI
+Golden Ratio Security Multiplier: 1.618x
+Signature Proof (keccak256): 0xfaba728d94a4a98b458971300da6a233a55e5a7718c0aff48d39ea16de5526c2
+
+Pasted Token / Contract Type: RAW_UTXO_STRING
+Pasted Token Payload:
+"# MONTI_ANSI_F841005 Proprietary Technology Function Specification
+openapi: 3.0.0
+info:
+  title: MONTI_ANSI_F841005 Proprietary API
+  version: 1.0.0
+  description: >
+    This API method implements the proprietary MONTI_ANSI_F841005 standard for
+    decentralized identity verification and data conversion within the Monticore ecosystem.
+    It ensures exclusive use of the MONTI_ANSI_F841005 format for identity claims and proofs.
+
+paths:
+  /monti_ansi_f841005/validateIdentity:
+    post:
+      summary: Validate and convert identity claims to MONTI_ANSI_F841005 format
+      description: >
+        Accepts identity claims in various formats and converts them exclusively into the
+        MONTI_ANSI_F841005 standard. Performs cryptographic verification and returns a signed
+        proof token.
+      operationId: validateIdentity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identityClaim:
+                  type: object
+                  description: >
+                    The identity claim data to be validated and converted.
+                  example:
+                    userId: "johncharlesmonti"
+                    claimType: "email"
+                    claimValue: "johncharlesmonti@example.com"
+                    issuedAt: "2026-08-23T09:00:00Z"
+                inputFormat:
+                  type: string
+                  description: Format of the incoming identity claim (e.g., "JWT", "VC", "CustomJSON")
+                  example: "JWT"
+      responses:
+        '200':
+          description: Successfully validated and converted identity claim
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  montiClaim:
+                    type: object
+                    description: Identity claim converted to MONTI_ANSI_F841005 format
+                    example:
+                      montiUserId: "johncharlesmonti"
+                      montiClaimType: "email"
+                      montiClaimValue: "johncharlesmonti@example.com"
+                      montiIssuedAt: "2026-08-23T09:00:00Z"
+                      montiSignature: "0xdbb4af08e5722101f6b193c187cd3d21b8ebabe25a840226cdf45029008eef0c"
+                  proofToken:
+                    type: string
+                    description: Cryptographic token proving claim validity under MONTI_ANSI_F841005
+                    example: "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '400':
+          description: Invalid input or unsupported format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unsupported input format or malformed identity claim."
+        '500':
+          description: Internal server error during validation
+
+components:
+  securitySchemes:
+    MontiApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-MONTI-API-KEY
+
+security:
+  - MontiApiKeyAuth: []
+
+tags:
+  - name: MONTI_ANSI_F841005
+    description: Proprietary identity validation and conversion methods"
+
+Decipher Status: Cryptographically verified and validated for JOHNCHARLESMONTI.COM?IDENTITY
+=========================================================================
